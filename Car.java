@@ -24,6 +24,6 @@ public class Car extends Vehicle implements Rentable {
     @Override
     public void returnVehicle() {
         setStatus(VehicleStatus.Available);
-        System.out.println("Car " + getLicensePlate() + " has been returned.");
+        System.out.println("Car " + getLicensePlate() + " .");
     }
 }
