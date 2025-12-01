@@ -21,7 +21,17 @@ public class RentalSystem {
     	}
     	return instance;
     }
+	private void  saveVehiical(Vehicle vehicale) {
+		try (PrintWriter out = new PrintWriter(new FiileWriter("vehicles.txt",true))){
+			
+            vehicle.getModel() + "," + vehicle.getYear() + "," + 
+            vehicle.getStatus() + "," + getVehicleType(vehicle));
+} catch (IOException e) {
+ System.out.println("Error saving vehicle: " + e.getMessage());
+}
+}
 	
+
 
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
