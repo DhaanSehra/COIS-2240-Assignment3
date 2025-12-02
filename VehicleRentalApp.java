@@ -65,6 +65,15 @@ public class VehicleRentalApp {
                     else {
 	                    System.out.println("Vehicle not added successfully.");
                     }
+                    if (vehicle != null){
+                        vehicle.setLicensePlate(plate);
+                        boolean added = rentalSystem.addVehicle(vehicle);
+                        if (added) {
+                            System.out.println("Vehicle added successfully.");
+                        } else {
+                            System.out.println("Vehicle not added - duplicate license plate.");
+                        }
+                    }
                     break;
 
                 case 2:
@@ -144,6 +153,7 @@ public class VehicleRentalApp {
                 	scanner.close();
                     System.exit(0);
             }
+            
         }
     }
 }
