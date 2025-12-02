@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class RentalSystem {
 	private static RentalSystem instance;
@@ -107,9 +109,9 @@ public class RentalSystem {
 	
 	
 	
-	private void  saveVehiical(Vehicle vehicale) {
-		try (PrintWriter out = new PrintWriter(new FiileWriter("vehicles.txt",true))){
-			
+	private void  saveVehical(Vehicle vehicle) {
+		try (PrintWriter out = new PrintWriter(new FileWriter("vehicles.txt",true))){
+	        out.println(vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + 
             vehicle.getModel() + "," + vehicle.getYear() + "," + 
             vehicle.getStatus() + "," + getVehicleType(vehicle));
 } catch (IOException e) {
@@ -149,13 +151,14 @@ public class RentalSystem {
 	    }
 
 
-	 public boolean addVehicle(Vehicle vehicle) {
+	 public boolean addVehicle(Vehicle vehicle, String plate) {
+		 vehicle.setLicensePlate(plate);
 	        if (findVehicleByPlate(vehicle.getLicensePlate()) != null) {
 	            System.out.println("Vehicle with plate " + vehicle.getLicensePlate() + " already exists.");
 	            return false;
 	        }
 	        vehicles.add(vehicle);
-	        saveVehicle(vehicle);
+	        saveVehical(vehicle);
 	        return true;
 	    }
 
