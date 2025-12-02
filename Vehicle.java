@@ -14,6 +14,19 @@ public abstract class Vehicle {
         this.status = VehicleStatus.Available;
         this.licensePlate = null;
     }
+    private boolean isValidPlate(String plate) {
+        if (plate == null || plate.isEmpty()) {
+            return false;
+        }
+        return plate.matches("[A-Za-z]{3}\\d{3}");
+    }
+
+    public void setLicensePlate(String plate) {
+        if (!isValidPlate(plate)) {
+            throw new IllegalArgumentException("Invalid license plate format. Must be 3 letters followed by 3 numbers.");
+        }
+        this.licensePlate = plate.toUpperCase();
+    }
 
     public Vehicle() {
         this(null, null, 0);
