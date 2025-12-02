@@ -1,6 +1,9 @@
 import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class RentalSystem {
 	private static RentalSystem instance;
@@ -9,9 +12,9 @@ public class RentalSystem {
     private RentalHistory rentalHistory = new RentalHistory();
     
     private RentalSystem() {
-    	loadData();
+    	loadData1();
     }
-    private void loadData() {
+    private void loadData1() {
 		// TODO Auto-generated method stub
 		
 	}
@@ -27,8 +30,80 @@ public class RentalSystem {
         loadCustomers();
         loadRentalRecords();
     }
-	
-	
+	private void loadVehicles() {
+        try (BufferedReader br = new BufferedReader(new FileReader("vehicles.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 6) {
+                    String plate = parts[0];
+                    String make = parts[1];
+                    String model = parts[2];
+                    int year = Integer.parseInt(parts[3]);
+                    Vehicle.VehicleStatus status = Vehicle.VehicleStatus.valueOf(parts[4]);
+                    String type = parts[5];
+                    
+                    Vehicle vehicle = null;
+                    if (type.equals("Car")) {
+                        vehicle = new Car(make, model, year, 4); 
+                    } else if (type.equals("Minibus")) {
+                        vehicle = new Minibus(make, model, year, false);  
+                    } else if (type.equals("PickupTruck")) {
+                        vehicle = new PickupTruck(make, model, year, 1000.0, false); 
+                    }
+                    
+                    if (vehicle != null) {
+                        vehicle.setLicensePlate(plate);
+                        vehicle.setStatus(status);
+                        vehicles.add(vehicle);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("No existing vehicle data found.");
+        }
+    }
+	private void loadCustomers() {
+        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    int id = Integer.parseInt(parts[0]);
+                    String name = parts[1];
+                    customers.add(new Customer(id, name));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("No existing customer data found.");
+        }
+    }
+	private void loadRentalRecords() {
+        try (BufferedReader br = new BufferedReader(new FileReader("rental_records.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 5) {
+                    String plate = parts[0];
+                    int customerId = Integer.parseInt(parts[1]);
+                    LocalDate date = LocalDate.parse(parts[2]);
+                    double amount = Double.parseDouble(parts[3]);
+                    String type = parts[4];
+                    
+                    Vehicle vehicle = findVehicleByPlate(plate);
+                    Customer customer = findCustomerById(customerId);
+                    
+                    if (vehicle != null && customer != null) {
+                        RentalRecord record = new RentalRecord(vehicle, customer, date, amount, type);
+                        rentalHistory.addRecord(record);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("No existing rental record data found.");
+        }
+    }
+
 	
 	
 	
