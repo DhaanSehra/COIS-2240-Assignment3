@@ -21,6 +21,8 @@ public class RentalSystem {
     	}
     	return instance;
     }
+	
+	
 	private void  saveVehiical(Vehicle vehicale) {
 		try (PrintWriter out = new PrintWriter(new FiileWriter("vehicles.txt",true))){
 			
@@ -29,8 +31,38 @@ public class RentalSystem {
 } catch (IOException e) {
  System.out.println("Error saving vehicle: " + e.getMessage());
 }
-}
+	}
 	
+	
+	
+	 private void saveCustomer(Customer customer) {
+	       
+		 try (PrintWriter out = new PrintWriter(new FileWriter("customers.txt", true))) {
+	            out.println(customer.getCustomerId() + "," + customer.getCustomerName());
+	        } catch (IOException e) {
+	            System.out.println("Error saving customer: " + e.getMessage());
+	        }
+	    }
+	 
+	 
+	 private void saveRecord(RentalRecord record) {
+	        try (PrintWriter out = new PrintWriter(new FileWriter("rental_records.txt", true))) {
+	            
+	        	out.println(record.getVehicle().getLicensePlate() + "," + 
+	                       record.getCustomer().getCustomerId() + "," + 
+	                       record.getRecordDate() + "," + 
+	                       record.getTotalAmount() + "," + 
+	                       record.getRecordType());
+	        } catch (IOException e) {
+	            System.out.println("Error saving record: " + e.getMessage());
+	        }
+	    }
+	 private String getVehicleType(Vehicle vehicle) {
+	        if (vehicle instanceof Car) return "Car";
+	        if (vehicle instanceof Minibus) return "Minibus";
+	        if (vehicle instanceof PickupTruck) return "PickupTruck";
+	        return "Unknown";
+	    }
 
 
     public void addVehicle(Vehicle vehicle) {
